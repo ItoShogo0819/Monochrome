@@ -109,6 +109,15 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CameraChange"",
+                    ""type"": ""Button"",
+                    ""id"": ""dab9bfe9-d045-4835-8060-768f29174988"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -199,27 +208,10 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                }
-            ]
-        },
-        {
-            ""name"": ""Camera"",
-            ""id"": ""5525af76-53c9-44dd-bd0b-55e6c49e4fdd"",
-            ""actions"": [
-                {
-                    ""name"": ""CameraChange"",
-                    ""type"": ""Button"",
-                    ""id"": ""dd1d46f2-8a65-40df-a6d1-6ed239ae5c43"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """",
-                    ""initialStateCheck"": false
-                }
-            ],
-            ""bindings"": [
+                },
                 {
                     ""name"": """",
-                    ""id"": ""0ccda20e-a7af-4a17-a00a-8f005b89a6d2"",
+                    ""id"": ""2101ca00-fb36-430f-a777-5b79039e8284"",
                     ""path"": ""<Gamepad>/leftTrigger"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -230,7 +222,7 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""e14a4ca0-9bc8-49b1-b44a-b9231315a00c"",
+                    ""id"": ""95018e2a-f0cb-430e-8250-09bdf238f141"",
                     ""path"": ""<Keyboard>/tab"",
                     ""interactions"": """",
                     ""processors"": """",
@@ -240,6 +232,12 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Camera"",
+            ""id"": ""5525af76-53c9-44dd-bd0b-55e6c49e4fdd"",
+            ""actions"": [],
+            ""bindings"": []
         }
     ],
     ""controlSchemes"": []
@@ -248,9 +246,9 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        m_Player_CameraChange = m_Player.FindAction("CameraChange", throwIfNotFound: true);
         // Camera
         m_Camera = asset.FindActionMap("Camera", throwIfNotFound: true);
-        m_Camera_CameraChange = m_Camera.FindAction("CameraChange", throwIfNotFound: true);
     }
 
     ~@Player_C()
@@ -334,6 +332,7 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
     private List<IPlayerActions> m_PlayerActionsCallbackInterfaces = new List<IPlayerActions>();
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Jump;
+    private readonly InputAction m_Player_CameraChange;
     /// <summary>
     /// Provides access to input actions defined in input action map "Player".
     /// </summary>
@@ -353,6 +352,10 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "Player/Jump".
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_Player_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action "Player/CameraChange".
+        /// </summary>
+        public InputAction @CameraChange => m_Wrapper.m_Player_CameraChange;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -385,6 +388,9 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
+            @CameraChange.started += instance.OnCameraChange;
+            @CameraChange.performed += instance.OnCameraChange;
+            @CameraChange.canceled += instance.OnCameraChange;
         }
 
         /// <summary>
@@ -402,6 +408,9 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
+            @CameraChange.started -= instance.OnCameraChange;
+            @CameraChange.performed -= instance.OnCameraChange;
+            @CameraChange.canceled -= instance.OnCameraChange;
         }
 
         /// <summary>
@@ -439,7 +448,6 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
     // Camera
     private readonly InputActionMap m_Camera;
     private List<ICameraActions> m_CameraActionsCallbackInterfaces = new List<ICameraActions>();
-    private readonly InputAction m_Camera_CameraChange;
     /// <summary>
     /// Provides access to input actions defined in input action map "Camera".
     /// </summary>
@@ -451,10 +459,6 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
         /// Construct a new instance of the input action map wrapper class.
         /// </summary>
         public CameraActions(@Player_C wrapper) { m_Wrapper = wrapper; }
-        /// <summary>
-        /// Provides access to the underlying input action "Camera/CameraChange".
-        /// </summary>
-        public InputAction @CameraChange => m_Wrapper.m_Camera_CameraChange;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -481,9 +485,6 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
         {
             if (instance == null || m_Wrapper.m_CameraActionsCallbackInterfaces.Contains(instance)) return;
             m_Wrapper.m_CameraActionsCallbackInterfaces.Add(instance);
-            @CameraChange.started += instance.OnCameraChange;
-            @CameraChange.performed += instance.OnCameraChange;
-            @CameraChange.canceled += instance.OnCameraChange;
         }
 
         /// <summary>
@@ -495,9 +496,6 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
         /// <seealso cref="CameraActions" />
         private void UnregisterCallbacks(ICameraActions instance)
         {
-            @CameraChange.started -= instance.OnCameraChange;
-            @CameraChange.performed -= instance.OnCameraChange;
-            @CameraChange.canceled -= instance.OnCameraChange;
         }
 
         /// <summary>
@@ -552,6 +550,13 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "CameraChange" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnCameraChange(InputAction.CallbackContext context);
     }
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Camera" which allows adding and removing callbacks.
@@ -560,12 +565,5 @@ public partial class @Player_C: IInputActionCollection2, IDisposable
     /// <seealso cref="CameraActions.RemoveCallbacks(ICameraActions)" />
     public interface ICameraActions
     {
-        /// <summary>
-        /// Method invoked when associated input action "CameraChange" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
-        /// </summary>
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
-        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnCameraChange(InputAction.CallbackContext context);
     }
 }

@@ -23,6 +23,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "CameraChange",
+                    "type": "Button",
+                    "id": "dab9bfe9-d045-4835-8060-768f29174988",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -113,27 +122,10 @@
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
-                }
-            ]
-        },
-        {
-            "name": "Camera",
-            "id": "5525af76-53c9-44dd-bd0b-55e6c49e4fdd",
-            "actions": [
-                {
-                    "name": "CameraChange",
-                    "type": "Button",
-                    "id": "dd1d46f2-8a65-40df-a6d1-6ed239ae5c43",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
+                },
                 {
                     "name": "",
-                    "id": "0ccda20e-a7af-4a17-a00a-8f005b89a6d2",
+                    "id": "2101ca00-fb36-430f-a777-5b79039e8284",
                     "path": "<Gamepad>/leftTrigger",
                     "interactions": "",
                     "processors": "",
@@ -144,7 +136,7 @@
                 },
                 {
                     "name": "",
-                    "id": "e14a4ca0-9bc8-49b1-b44a-b9231315a00c",
+                    "id": "95018e2a-f0cb-430e-8250-09bdf238f141",
                     "path": "<Keyboard>/tab",
                     "interactions": "",
                     "processors": "",
@@ -154,6 +146,12 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Camera",
+            "id": "5525af76-53c9-44dd-bd0b-55e6c49e4fdd",
+            "actions": [],
+            "bindings": []
         }
     ],
     "controlSchemes": []

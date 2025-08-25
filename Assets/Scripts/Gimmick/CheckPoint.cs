@@ -1,22 +1,22 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-    private bool _actived = false;
+    private HashSet<GameObject> _activatedPlayers = new HashSet<GameObject>();
 
     void OnTriggerEnter(Collider other)
     {
-        if (_actived) return;
+        if (!other.CompareTag("Player")) return;
 
-        if (other.CompareTag("Player"))
+        if (_activatedPlayers.Contains(other.gameObject)) return;
+
+        PlayerDeadHandler deadHandler = other.GetComponent<PlayerDeadHandler>();
+        if (deadHandler != null)
         {
-            PlayerDeadHandler deadHandler = other.GetComponent<PlayerDeadHandler>();
-            if (deadHandler != null )
-            {
-                deadHandler.RespawnPoint = this.gameObject;
-                _actived = true;
-                Debug.Log("リスポーン地点を更新:" + this.name);
-            }
+            deadHandler.RespawnPoint = this.gameObject;
+            _activatedPlayers.Add(other.gameObject); // このプレイヤーだけフラグ立てる
+            Debug.Log("リスポーン地点を更新: " + this.name);
         }
     }
 }

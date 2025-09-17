@@ -11,9 +11,9 @@ public class ColorDeathObject : MonoBehaviour
 
     void Start()
     {
-        _objRend = GetComponent<Renderer>();
-        _initialType = CurrentType; // 最初の色を記録
-        ApplyColor();
+        _objRend = GetComponent<Renderer>();                    // レンダラー取得
+        _initialType = CurrentType;                              // 初期色を記録
+        ApplyColor();                                            // 色反映
     }
 
     // 現在の色をレンダーに反映
@@ -23,11 +23,11 @@ public class ColorDeathObject : MonoBehaviour
         {
             if (CurrentType == PlayerColorType.Black)
             {
-                _objRend.material.color = ColorA;
+                _objRend.material.color = ColorA;               // 黒に設定
             }
             else
             {
-                _objRend.material.color = ColorB;
+                _objRend.material.color = ColorB;               // 白に設定
             }
         }
     }
@@ -37,25 +37,25 @@ public class ColorDeathObject : MonoBehaviour
     {
         if (CurrentType == PlayerColorType.Black)
         {
-            CurrentType = PlayerColorType.White;
+            CurrentType = PlayerColorType.White;               // 白に変更
         }
         else
         {
-            CurrentType = PlayerColorType.Black;
+            CurrentType = PlayerColorType.Black;               // 黒に変更
         }
-        ApplyColor();
+        ApplyColor();                                          // レンダラー更新
     }
 
     // 元の色に戻す
     public void ResetInitialColor()
     {
-        CurrentType = _initialType;
-        ApplyColor();
+        CurrentType = _initialType;                            // 初期色に戻す
+        ApplyColor();                                          // レンダラー更新
     }
 
     void OnCollisionEnter(Collision col)
     {
-        if (!col.gameObject.CompareTag("Player")) return;
+        if (!col.gameObject.CompareTag("Player")) return;      // プレイヤー以外無視
 
         PlayerColor pc = col.gameObject.GetComponent<PlayerColor>();
         if (pc == null) return;
@@ -63,21 +63,21 @@ public class ColorDeathObject : MonoBehaviour
         // 同色なら死亡
         if (pc.playerColor == CurrentType)
         {
-            DeadManager.Instance.Die(col.gameObject);
+            DeadManager.Instance.Die(col.gameObject);          // 死亡処理呼び出し
         }
     }
 
     void OnCollisionStay(Collision col)
     {
-        if (!col.gameObject.CompareTag("Player")) return;
+        if (!col.gameObject.CompareTag("Player")) return;      // プレイヤー以外無視
 
         PlayerColor pc = col.gameObject.GetComponent<PlayerColor>();
         if (pc == null) return;
 
-        // 同色なら死亡（色が変化した場合に対応）
+        // 色が変化した場合も死亡判定
         if (pc.playerColor == CurrentType)
         {
-            DeadManager.Instance.Die(col.gameObject);
+            DeadManager.Instance.Die(col.gameObject);          // 死亡処理
         }
     }
 }

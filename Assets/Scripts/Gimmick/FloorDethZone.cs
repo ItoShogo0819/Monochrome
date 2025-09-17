@@ -6,19 +6,20 @@ public class FloorDethZone : MonoBehaviour
 
     void Start()
     {
-        _floorColor = GetComponent<FloorColor>();
+        _floorColor = GetComponent<FloorColor>();  // FloorColor コンポーネント取得
     }
 
     void OnCollisionEnter(Collision other)
     {
-        if(!other.gameObject.CompareTag("Player"))return;
+        if (!other.gameObject.CompareTag("Player")) return;  // プレイヤー以外は無視
 
-        PlayerColor playerColor = other.gameObject.GetComponent<PlayerColor>();
-        if(playerColor != null && playerColor.playerColor == _floorColor.floorColor)
+        PlayerColor playerColor = other.gameObject.GetComponent<PlayerColor>();  // プレイヤーの色情報取得
+        if (playerColor != null && playerColor.playerColor == _floorColor.floorColor)
         {
-            if(DeadManager.Instance != null)
+            // プレイヤー色と床の色が一致したら死亡処理
+            if (DeadManager.Instance != null)
             {
-                DeadManager.Instance.Die(other.gameObject);
+                DeadManager.Instance.Die(other.gameObject);  // 死亡処理呼び出し
             }
         }
     }

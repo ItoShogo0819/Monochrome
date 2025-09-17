@@ -12,29 +12,29 @@ public class TimerUI : MonoBehaviour
 
     void Update()
     {
-        if (!_isRunning || _isPaused) return;
+        if (!_isRunning || _isPaused) return;  // 停止中やポーズ中は更新しない
 
-        _elapsedTime += Time.deltaTime;
-        TimerText.text = $"{_elapsedTime:F2}秒";
+        _elapsedTime += Time.deltaTime;        // 時間加算
+        TimerText.text = $"{_elapsedTime:F2}Sec"; // 表示更新
     }
 
     public void StopTimer()
     {
-        _isRunning = false;
+        _isRunning = false;   // タイマー停止
     }
 
     public float GetElapsedTime()
     {
-        return _elapsedTime;
+        return _elapsedTime;  // 経過時間取得
     }
 
     public void PauseTimer()
     {
-        _isPaused = true;
+        _isPaused = true;     // ポーズ
     }
 
     public void ResumeTimer()
     {
-        _isPaused = false;
+        _isPaused = false;    // ポーズ解除
     }
 }

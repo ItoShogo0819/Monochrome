@@ -18,12 +18,13 @@ public class DeadManager : MonoBehaviour
 
     void Awake()
     {
-        if (Instance == null) Instance = this;
+        if (Instance == null) Instance = this;  // Singleton設定
         else Destroy(gameObject);
     }
 
     void Start()
     {
+        // 初期リスポーン位置を記録
         _respawnPoints[BlackPlayer] = BlackPlayer.transform.position;
         _respawnPoints[WhitePlayer] = WhitePlayer.transform.position;
 
@@ -33,10 +34,10 @@ public class DeadManager : MonoBehaviour
 
     public void Die(GameObject player)
     {
-        if (_isDead[player]) return;
+        if (_isDead[player]) return;  // 既に死亡していたら処理しない
         _isDead[player] = true;
 
-        // 追従停止
+        // PlayerAutoMove 追従停止
         PlayerAutoMove autoMove = player.GetComponent<PlayerAutoMove>();
         if (autoMove != null) autoMove.SetDead(true);
 
@@ -48,27 +49,34 @@ public class DeadManager : MonoBehaviour
         Rigidbody rb = player.GetComponent<Rigidbody>();
         if (rb != null)
         {
-            rb.linearVelocity = Vector3.zero;
-            rb.angularVelocity = Vector3.zero;
+            rb.linearVelocity = Vector3.zero;   // 移動停止
+            rb.angularVelocity = Vector3.zero;  // 回転停止
         }
 
-        player.SetActive(false);
+        // PlayerMove の入力リセット
+        PlayerMove move = player.GetComponent<PlayerMove>();
+        if (move != null)
+        {
+            move.ResetInput();
+        }
 
-        yield return new WaitForSeconds(RespawnDelay);
+        player.SetActive(false);  // 非表示
+
+        yield return new WaitForSeconds(RespawnDelay);  // 待機
 
         if (_respawnPoints.TryGetValue(player, out Vector3 respawnPos))
-            player.transform.position = respawnPos;
+            player.transform.position = respawnPos;  // リスポーン位置に移動
 
-        player.SetActive(true);
+        player.SetActive(true);  // 表示
 
-        // 再び床に接触するまで追従しない
+        // 追従制御解除
         PlayerAutoMove autoMove2 = player.GetComponent<PlayerAutoMove>();
         if (autoMove2 != null) autoMove2.SetDead(false);
 
-        _isDead[player] = false;
+        _isDead[player] = false;  // 死亡状態解除
     }
 
-    // チェックポイント用
+    // チェックポイント更新
     public void UpdateRespawnPoint(GameObject player, Vector3 newPoint)
     {
         _respawnPoints[player] = newPoint;

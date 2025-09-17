@@ -8,17 +8,17 @@ public class FallDeath : MonoBehaviour
 
     void Start()
     {
-        _playerColor = GetComponent<PlayerColor>();
+        _playerColor = GetComponent<PlayerColor>();  // PlayerColor コンポーネント取得
     }
 
     void Update()
     {
+        // Y座標が落下限界を下回ったら死亡
         if (transform.position.y < FallLimitY)
         {
-            // DeadManager の Singleton 経由で死亡処理
             if (DeadManager.Instance != null)
             {
-                DeadManager.Instance.Die(gameObject);
+                DeadManager.Instance.Die(gameObject);  // 死亡処理呼び出し
             }
         }
     }

@@ -8,25 +8,25 @@ public class PlayerJump : MonoBehaviour
     public bool IsGrounded = true;
     public bool JumpControl = true;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>(); // Rigidbody取得
     }
 
     public void OnJump(InputValue value)
     {
-        if (!JumpControl) return;
+        if (!JumpControl) return;         // ジャンプ無効時は処理しない
 
-        if(IsGrounded && value.isPressed)
+        if (IsGrounded && value.isPressed) // 地面にいる & 入力あり
         {
-            rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse);
-            IsGrounded = false;
+            rb.AddForce(Vector3.up * JumpForce, ForceMode.Impulse); // 上方向に力を加える
+            IsGrounded = false;            // 空中判定に変更
         }
     }
 
     private void OnCollisionEnter(Collision other)
     {
+        // 地面または可動床に接触したら接地判定
         if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("MoveGround"))
         {
             IsGrounded = true;

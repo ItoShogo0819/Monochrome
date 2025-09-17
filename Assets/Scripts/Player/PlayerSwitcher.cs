@@ -11,24 +11,23 @@ public class PlayerSwitcher : MonoBehaviour
     public PlayerJump BlackPlayerJump;
     public PlayerJump WhitePlayerJump;
 
-    // Update is called once per frame
     void Update()
     {
-        if (MainCamera.activeSelf)
+        if (MainCamera.activeSelf)          // メインカメラがアクティブ
         {
-            BlackPlayerMove.IsControllable = true;
-            WhitePlayerMove.IsControllable = false;
+            BlackPlayerMove.IsControllable = true;   // 黒操作可
+            WhitePlayerMove.IsControllable = false;  // 白操作不可
 
-            BlackPlayerJump.JumpControl = true;
-            WhitePlayerJump.JumpControl = false;
+            BlackPlayerJump.JumpControl = true;      // 黒ジャンプ可
+            WhitePlayerJump.JumpControl = false;    // 白ジャンプ不可
         }
-        else if (SabCamera.activeSelf)
+        else if (SabCamera.activeSelf)      // サブカメラがアクティブ
         {
-            BlackPlayerMove.IsControllable = false;
-            WhitePlayerMove.IsControllable = true;
+            BlackPlayerMove.IsControllable = false;  // 黒操作不可
+            WhitePlayerMove.IsControllable = true;   // 白操作可
 
-            BlackPlayerJump.JumpControl = false;
-            WhitePlayerJump.JumpControl = true;
+            BlackPlayerJump.JumpControl = false;     // 黒ジャンプ不可
+            WhitePlayerJump.JumpControl = true;      // 白ジャンプ可
         }
     }
 }

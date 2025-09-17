@@ -10,10 +10,11 @@ public class MenuBlock : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (_triggered) return;
-        if (!other.CompareTag("Player")) return;
+        if (_triggered) return;                               // 既に処理済みなら無視
+        if (!other.CompareTag("Player")) return;             // プレイヤーのみ反応
 
         _triggered = true;
+        // フェードアウト後に指定シーンをロード
         StartCoroutine(_fadeCont.FadeOut(() => { SceneManager.LoadScene(_sceneToLoad); }));
     }
 }

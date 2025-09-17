@@ -17,26 +17,26 @@ public class MovingObject : MonoBehaviour
 
     void Start()
     {
-        _rb = GetComponent<Rigidbody>();
-        _rb.isKinematic = true;
-        _startPos = transform.position;
-        _elapsedTime = 0f;
+        _rb = GetComponent<Rigidbody>();  // Rigidbody 取得
+        _rb.isKinematic = true;           // 物理影響なしに設定
+        _startPos = transform.position;   // 開始位置記録
+        _elapsedTime = 0f;                // タイマー初期化
     }
 
     void FixedUpdate()
     {
-        _elapsedTime += Time.fixedDeltaTime * MoveSpeed;
-        Vector3 dir = MoveDirection.normalized;
+        _elapsedTime += Time.fixedDeltaTime * MoveSpeed;  // 経過時間更新
+        Vector3 dir = MoveDirection.normalized;          // 移動方向正規化
 
-        float cycle = _elapsedTime % (MoveDistance * 2f);
+        float cycle = _elapsedTime % (MoveDistance * 2f); // 往復サイクル
         float offset;
-        if (cycle <= MoveDistance) offset = cycle;
-        else offset = MoveDistance * 2f - cycle;
+        if (cycle <= MoveDistance) offset = cycle;        // 前方向移動
+        else offset = MoveDistance * 2f - cycle;         // 戻り方向移動
 
-        Vector3 newPos = _startPos + dir * offset;
+        Vector3 newPos = _startPos + dir * offset;       // 新しい位置計算
 
-        _currentVelocity = (newPos - _rb.position) / Time.fixedDeltaTime;
+        _currentVelocity = (newPos - _rb.position) / Time.fixedDeltaTime; // 速度計算
 
-        _rb.MovePosition(newPos);
+        _rb.MovePosition(newPos);  // Rigidbody 移動
     }
 }

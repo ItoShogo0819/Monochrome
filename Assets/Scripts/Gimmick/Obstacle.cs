@@ -2,14 +2,19 @@ using UnityEngine;
 
 public class Obstacle : MonoBehaviour
 {
-    void OnTriggerEnter(Collider other)
-    {
-        if (!other.CompareTag("Player")) return;
+    public PlayerColorType ObstacleColor;
 
-        PlayerDeadHandler deadHandler = other.GetComponent<PlayerDeadHandler>();
-        if(deadHandler != null)
+    void OnCollisionEnter(Collision other)
+    {
+        if (!other.gameObject.CompareTag("Player")) return;
+
+        PlayerColor pc = other.gameObject.GetComponent<PlayerColor>();
+        if (pc != null && pc.playerColor == ObstacleColor)
         {
-            deadHandler.Die();
+            if (DeadManager.Instance != null)
+            {
+                DeadManager.Instance.Die(other.gameObject);
+            }
         }
     }
 }

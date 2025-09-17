@@ -10,7 +10,8 @@ public class PlayerMove : MonoBehaviour
     public float RunSpeed = 8f;
     public bool IsControllable = true;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public Vector2 MoveInput => moveInput;
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
@@ -25,7 +26,12 @@ public class PlayerMove : MonoBehaviour
     {
         if (!IsControllable) return;
 
-        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y).normalized;
-        rb.MovePosition(rb.position + move * RunSpeed * Time.fixedDeltaTime);
+        Vector3 move = new Vector3(moveInput.x, 0, moveInput.y).normalized * RunSpeed;
+        rb.MovePosition(rb.position + move * Time.fixedDeltaTime);
+    }
+
+    public void ResetInput()
+    {
+        moveInput = Vector2.zero;
     }
 }

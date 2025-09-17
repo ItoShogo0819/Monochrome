@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 
-public class PlayerDeadHandler : MonoBehaviour
+public class DeadHead : MonoBehaviour
 {
     [Header("ê›íË")]
     public float AbsordDuration = 0.5f;

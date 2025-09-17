@@ -4,16 +4,23 @@ using System.Collections.Generic;
 
 public class DeadManager : MonoBehaviour
 {
-    [Header("�v���C���[�ݒ�")]
+    public static DeadManager Instance { get; private set; }
+
+    [Header("プレイヤー設定")]
     public GameObject BlackPlayer;
     public GameObject WhitePlayer;
 
-    [Header("���X�|�[���ݒ�")]
+    [Header("リスポーン設定")]
     public float RespawnDelay = 0.5f;
-    public GameObject AbsorbEffectPrefab;
 
-    private Dictionary<GameObject, Vector3> _respawnPoints = new Dictionary<GameObject, Vector3>();
-    private Dictionary<GameObject, bool> _isDead = new Dictionary<GameObject, bool>();
+    private Dictionary<GameObject, Vector3> _respawnPoints = new();
+    private Dictionary<GameObject, bool> _isDead = new();
+
+    void Awake()
+    {
+        if (Instance == null) Instance = this;
+        else Destroy(gameObject);
+    }
 
     void Start()
     {
@@ -29,45 +36,42 @@ public class DeadManager : MonoBehaviour
         if (_isDead[player]) return;
         _isDead[player] = true;
 
+        // 追従停止
+        PlayerAutoMove autoMove = player.GetComponent<PlayerAutoMove>();
+        if (autoMove != null) autoMove.SetDead(true);
+
         StartCoroutine(RespawnRoutine(player));
-    }
-
-    public void UpdateRespawnPoint(GameObject player, Vector3 newPoint)
-    {
-        _respawnPoints[player] = newPoint;
-
-        if (AbsorbEffectPrefab)
-        {
-            Instantiate(AbsorbEffectPrefab, newPoint, Quaternion.identity);
-        }
     }
 
     private IEnumerator RespawnRoutine(GameObject player)
     {
-        if (AbsorbEffectPrefab)
+        Rigidbody rb = player.GetComponent<Rigidbody>();
+        if (rb != null)
         {
-            Instantiate(AbsorbEffectPrefab, player.transform.position, Quaternion.identity);
+            rb.linearVelocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
         }
 
-        TogglePlayerControl(player, false);
         player.SetActive(false);
 
         yield return new WaitForSeconds(RespawnDelay);
 
         if (_respawnPoints.TryGetValue(player, out Vector3 respawnPos))
-        {
             player.transform.position = respawnPos;
-        }
 
         player.SetActive(true);
-        TogglePlayerControl(player, true);
+
+        // 再び床に接触するまで追従しない
+        PlayerAutoMove autoMove2 = player.GetComponent<PlayerAutoMove>();
+        if (autoMove2 != null) autoMove2.SetDead(false);
 
         _isDead[player] = false;
     }
 
-    private void TogglePlayerControl(GameObject player, bool enable)
+    // チェックポイント用
+    public void UpdateRespawnPoint(GameObject player, Vector3 newPoint)
     {
-        player.GetComponent<PlayerMove>().enabled = enable;
-        player.GetComponent<PlayerJump>().enabled = enable;
+        _respawnPoints[player] = newPoint;
+        Debug.Log($"{player.name}のリスポーン地点を更新:{newPoint}");
     }
 }

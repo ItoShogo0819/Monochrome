@@ -16,10 +16,9 @@ public class FloorDethZone : MonoBehaviour
         PlayerColor playerColor = other.gameObject.GetComponent<PlayerColor>();
         if(playerColor != null && playerColor.playerColor == _floorColor.floorColor)
         {
-            DeadManager dm = FindAnyObjectByType<DeadManager>();
-            if(dm != null)
+            if(DeadManager.Instance != null)
             {
-                dm.Die(other.gameObject);
+                DeadManager.Instance.Die(other.gameObject);
             }
         }
     }

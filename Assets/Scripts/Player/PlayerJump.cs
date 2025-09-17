@@ -27,7 +27,7 @@ public class PlayerJump : MonoBehaviour
 
     private void OnCollisionEnter(Collision other)
     {
-        if (other.gameObject.CompareTag("Ground"))
+        if (other.gameObject.CompareTag("Ground") || other.gameObject.CompareTag("MoveGround"))
         {
             IsGrounded = true;
         }
